@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pavlo Puzach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0f172a;
+      --text: #1e293b;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #0f3d68;
+      --accent-soft: #e8eef5;
+      --bg: #f1f5f9;
+      --paper: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: 10.25pt/1.45 "Source Sans 3", Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hint {
+      width: min(210mm, calc(100% - 24px));
+      margin: 16px auto 10px;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-size: 9.2pt;
+      line-height: 1.45;
+    }
+
+    .hint strong { color: var(--ink); }
+    .hint ol { margin: 6px 0 0 18px; }
+    .hint li { margin: 2px 0; color: var(--muted); }
+
+    .todo {
+      width: min(210mm, calc(100% - 24px));
+      margin: 0 auto 14px;
+      padding: 12px 14px;
+      background: #fffbeb;
+      border: 1px solid #f59e0b;
+      color: var(--text);
+      font-size: 9.2pt;
+      line-height: 1.45;
+    }
+
+    .todo h3 {
+      margin: 0 0 6px;
+      font-size: 9.5pt;
+      color: var(--ink);
+    }
+
+    .todo ul { margin: 0 0 0 18px; }
+    .todo li { margin: 3px 0; color: var(--muted); }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 28px;
+      padding: 11mm 14mm 10mm;
+      background: var(--paper);
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      display: grid;
+      grid-template-columns: 1fr 28mm;
+      gap: 14px;
+      align-items: start;
+      padding-bottom: 12px;
+      border-bottom: 2.5px solid var(--accent);
+    }
+
+    .name {
+      font: 700 26pt/1.05 "Source Serif 4", Georgia, serif;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .title {
+      margin-top: 4px;
+      color: var(--accent);
+      font-size: 11pt;
+      font-weight: 600;
+    }
+
+    .contacts {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 0;
+      color: var(--muted);
+      font-size: 9pt;
+    }
+
+    .contacts span,
+    .contacts a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .contacts a:hover { color: var(--accent); }
+
+    .contacts .sep {
+      margin: 0 8px;
+      color: #cbd5e1;
+    }
+
+    .photo {
+      width: 28mm;
+      height: 28mm;
+      object-fit: cover;
+      object-position: center top;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      filter: grayscale(15%);
+      background: #f8fafc;
+    }
+
+    .photo-fallback {
+      width: 28mm;
+      height: 28mm;
+      display: none;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font: 700 14pt/1 "Source Serif 4", Georgia, serif;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      margin-top: 10px;
+    }
+
+    .section-title {
+      margin-bottom: 7px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid var(--line);
+      color: var(--accent);
+      font: 700 8.5pt/1 "Source Sans 3", Arial, sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .summary {
+      color: var(--text);
+      font-size: 10pt;
+      line-height: 1.5;
+    }
+
+    /* Skills matrix */
+    .skills-grid {
+      display: grid;
+      gap: 5px;
+    }
+
+    .skill-row {
+      display: grid;
+      grid-template-columns: 28mm 1fr;
+      gap: 10px;
+      align-items: baseline;
+    }
+
+    .skill-label {
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 9.2pt;
+    }
+
+    .skill-value {
+      color: var(--text);
+      font-size: 9.3pt;
+    }
+
+    /* Experience / projects */
+    .item { margin-bottom: 7px; }
+    .item:last-child { margin-bottom: 0; }
+
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .item-role {
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 10.4pt;
+    }
+
+    .item-org {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .item-date {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 9pt;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    a.link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(15, 61, 104, 0.25);
+    }
+
+    a.link:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    .project-link {
+      margin-top: 3px;
+      font-size: 8.4pt;
+    }
+
+    .project-link a {
+      color: var(--accent);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .project-link a:hover { text-decoration: underline; }
+
+    .item-sub {
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 9pt;
+    }
+
+    .item ul {
+      margin: 5px 0 0;
+      padding-left: 16px;
+    }
+
+    .item li {
+      margin: 0 0 3px;
+      color: var(--text);
+      font-size: 9.5pt;
+    }
+
+    .item li::marker { color: var(--accent); }
+
+    .project-desc {
+      margin-top: 3px;
+      color: var(--text);
+      font-size: 9.4pt;
+    }
+
+    .tech {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 8.6pt;
+      font-weight: 600;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .lang-line,
+    .cert-line {
+      color: var(--text);
+      font-size: 9.5pt;
+    }
+
+    .cert-line strong { color: var(--ink); }
+
+    .muted { color: var(--muted); }
+
+    .footer {
+      margin-top: 14px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 8pt;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+    }
+
+    @media print {
+      html, body {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .hint,
+      .todo,
+      .no-print {
+        display: none !important;
+        height: 0 !important;
+        overflow: hidden !important;
+      }
+      .page {
+        margin: 0 !important;
+        width: auto !important;
+        min-height: auto !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+      a, a.link, .project-link a, .contacts a, .footer a {
+        color: var(--accent) !important;
+        text-decoration: underline;
+      }
+      .item { break-inside: avoid; }
+      .photo {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .page { width: min(210mm, 100%); }
+      .header { grid-template-columns: 1fr; }
+      .photo, .photo-fallback { margin-top: 4px; }
+      .skill-row { grid-template-columns: 1fr; gap: 2px; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hint no-print">
+    <strong>Экспорт:</strong>
+    <ol>
+      <li><strong>PDF:</strong> открой этот HTML напрямую → Ctrl+P → Save as PDF → выключи <em>Headers and footers</em></li>
+      <li><strong>Word:</strong> есть файл <code>Pavlo_Puzach_Resume.docx</code> в этой же папке (удобно править дальше)</li>
+    </ol>
+  </div>
+
+  <main class="page">
+    <header class="header">
+      <div>
+        <h1 class="name">Pavlo Puzach</h1>
+        <p class="title">Full-Stack Developer · AI Product Integrations · Python / Django · React / TypeScript</p>
+        <div class="contacts">
+          <span>Berlin, Germany · Remote</span><span class="sep">|</span>
+          <a href="tel:+4917632324938">+49 176 32324938</a><span class="sep">|</span>
+          <a href="mailto:sudo.pavlo@gmail.com">sudo.pavlo@gmail.com</a><span class="sep">|</span>
+          <a href="https://github.com/sudopavlo-collab">GitHub</a><span class="sep">|</span>
+          <a href="https://www.linkedin.com/in/pavel-puzach-b34630400/">LinkedIn</a><span class="sep">|</span>
+          <span>Available for interviews now</span>
+        </div>
+      </div>
+      <img
+        class="photo"
+        src="photo.jpg"
+        alt="Pavlo Puzach"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+      />
+      <div class="photo-fallback">PP</div>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">Summary</h2>
+      <p class="summary">
+        Full-Stack Developer based in Berlin, shipping production-style products with AI features and deep API integrations.
+        Portfolio of <strong>8+ public repositories</strong>: dating platform with AI Copilot, Telegram Mini App, crypto exchange UX,
+        market scanners, e-commerce and niche bots. Strong end-to-end ownership — from architecture to deploy.
+        Background in pentesting &amp; cyber defense. Open to Full-time / Contract · available for discussions immediately.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-row">
+          <div class="skill-label">Backend</div>
+          <div class="skill-value">Python, Django, Django REST Framework, Celery, Redis, PostgreSQL, REST APIs, WebSockets / ASGI</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Frontend</div>
+          <div class="skill-value">React, TypeScript, Vite, HTML/CSS, Node.js, Express, Zustand</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">AI / LLM</div>
+          <div class="skill-value">OpenAI API, LM Studio (local LLMs), OpenRouter, prompt engineering, streaming chat, AI Copilot, persona systems</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">Integrations</div>
+          <div class="skill-value">Stripe, Telegram Bot API / Mini Apps, Web3, Polymarket APIs, Playwright, S3 storages, Twilio OTP</div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-label">DevOps / QA</div>
+          <div class="skill-value">Docker, Git, Linux, Nginx, CI basics, software testing fundamentals</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Experience</h2>
+      <article class="item">
+        <div class="item-head">
+          <div>
+            <span class="item-role">Full-Stack Developer</span>
+            <span class="item-org"> · Freelance / Independent</span>
+          </div>
+          <div class="item-date">2024 — Present</div>
+        </div>
+        <div class="item-sub">Berlin / Remote · Product engineering, AI features, payments &amp; API integrations</div>
+        <ul>
+          <li>Built <strong>Pulse Online</strong> dating platform across <strong>10+ feature modules</strong> (matching, WebSocket chat, Couple Mode, VIP) with AI Copilot (5 reply styles) via OpenAI API + local LM Studio inference.</li>
+          <li>Implemented production infra: Stripe subscriptions/webhooks, Celery/Redis jobs, Docker Compose, ASGI WebSockets, optional Twilio OTP and S3 media.</li>
+          <li>Shipped Telegram AI product with <strong>15+ prompt personas</strong>, streaming replies, Stars/crypto payments, referral and retention automations (OpenRouter).</li>
+          <li>Delivered <strong>VilnaMine</strong> Telegram Mini App (React/TS/Zustand): tap-to-earn loop, upgrades, referrals, leaderboard, Telegram WebApp SDK.</li>
+          <li>Built crypto/market tooling: CryptoChange exchange UX (AML wizard) + Polymarket scanners with Telegram alerts and paper strategies.</li>
+          <li>Published <strong>8+ portfolio repos</strong> on GitHub with clean READMEs, env-based secrets, and deploy-oriented structure.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Selected Projects</h2>
+
+      <article class="item">
+        <div class="item-head"><div class="item-role">Pulse Online — Dating Platform + AI Copilot</div></div>
+        <p class="project-desc">Realtime social product: swipe matching, WebSocket chat, Couple Mode, Stripe VIP, AI assistance, REST/mobile API.</p>
+        <p class="tech">Django · Channels · Celery · Redis · LM Studio / OpenAI · Stripe · Docker</p>
+        <p class="project-link"><a href="https://github.com/sudopavlo-collab/pulse-online-dating">https://github.com/sudopavlo-collab/pulse-online-dating</a></p>
+      </article>
+
+      <article class="item">
+        <div class="item-head"><div class="item-role">VilnaMine — Telegram Mini App Game</div></div>
+        <p class="project-desc">Idle / tap-to-earn Mini App: mining progression, upgrades, exchange loop, referrals, leaderboard, Telegram Cloud Storage.</p>
+        <p class="tech">React · TypeScript · Vite · Zustand · Telegram WebApp</p>
+        <p class="project-link"><a href="https://github.com/sudopavlo-collab/vilnamine-telegram-miniapp">https://github.com/sudopavlo-collab/vilnamine-telegram-miniapp</a></p>
+      </article>
+
+      <article class="item">
+        <div class="item-head"><div class="item-role">CryptoChange — Crypto Exchange Web App</div></div>
+        <p class="project-desc">Exchange product UX: live rates, AML verification wizard, wallet integrations, multi-city offices.</p>
+        <p class="tech">React 19 · TypeScript · Vite · Express · Web3</p>
+        <p class="project-link"><a href="https://github.com/sudopavlo-collab/cryptochange">https://github.com/sudopavlo-collab/cryptochange</a></p>
+      </article>
+
+      <article class="item">
+        <div class="item-head"><div class="item-role">Polymarket Trading Scanner</div></div>
+        <p class="project-desc">Market monitoring, alerting, and paper-trading strategies for prediction markets (env-based credentials).</p>
+        <p class="tech">Python · Market APIs · Telegram alerts</p>
+        <p class="project-link"><a href="https://github.com/sudopavlo-collab/polymarket-trading-scanner">https://github.com/sudopavlo-collab/polymarket-trading-scanner</a></p>
+      </article>
+
+      <article class="item">
+        <div class="item-head"><div class="item-role">Telegram AI Bot with Payments</div></div>
+        <p class="project-desc">AI chat bot with 15+ prompt personas, streaming replies, Stars/crypto payments, referral and retention flows.</p>
+        <p class="tech">Python · OpenRouter · Telegram Bot API · Payments</p>
+        <p class="project-link"><a href="https://github.com/sudopavlo-collab/Telegram-AI-bot-with-payments">https://github.com/sudopavlo-collab/Telegram-AI-bot-with-payments</a></p>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="two-col">
+        <div>
+          <h2 class="section-title">Education</h2>
+          <p class="cert-line">
+            <strong>International Scientific and Technical University (МНТУ)</strong><br />
+            Bachelor — Software Engineering (Developer &amp; Tester)<br />
+            <span class="muted">Sep 2015 — May 2018</span>
+          </p>
+          <p class="cert-line" style="margin-top:7px">
+            <strong>Master’s Degree — Economics / Management (Economist)</strong><br />
+            <span class="muted">2018 — 2020</span>
+          </p>
+          <p class="cert-line" style="margin-top:7px">
+            <strong>Pentesting &amp; Cyber Defense Certificate</strong> — 2020<br />
+            <span class="muted">Chernihiv Regional State Administration</span>
+          </p>
+        </div>
+        <div>
+          <h2 class="section-title">Languages</h2>
+          <p class="lang-line">Ukrainian — Native</p>
+          <p class="lang-line">Russian — Fluent</p>
+          <p class="lang-line">English — A1</p>
+          <p class="lang-line">German — A1–A2 <span class="muted">(Integrationskurse, in progress)</span></p>
+          <p class="lang-line" style="margin-top:8px"><strong>Availability:</strong> interviews / discussions from now</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <span>Portfolio: <a href="https://github.com/sudopavlo-collab">https://github.com/sudopavlo-collab</a></span>
+      <span>Berlin · +49 176 32324938 · Available now</span>
+    </div>
+  </main>
+</body>
+</html>
